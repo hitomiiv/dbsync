@@ -1,0 +1,11 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4f5efbda_002D0062_002D45ab_002D9a08_002D100b82e1cf84/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ZeroScriptOrderTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A80EC0C8-DC70-4432-8201-3CB675CD24D5::net8.0::dbsync.Test.ProgramTests.ZeroScriptOrderTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A80EC0C8-DC70-4432-8201-3CB675CD24D5::net8.0::dbsync.Test.ProgramTests.MigrationScriptOrderTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A80EC0C8-DC70-4432-8201-3CB675CD24D5::net8.0::dbsync.Test.ProgramTests.ProcedureScriptOrderTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A80EC0C8-DC70-4432-8201-3CB675CD24D5::net8.0::dbsync.Test.ProgramTests.ComplexProcedureScriptOrderTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A80EC0C8-DC70-4432-8201-3CB675CD24D5::net8.0::dbsync.Test.ProgramTests.CyclicDependencyTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A80EC0C8-DC70-4432-8201-3CB675CD24D5::net8.0::dbsync.Test.ProgramTests.HybridScriptOrderTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
