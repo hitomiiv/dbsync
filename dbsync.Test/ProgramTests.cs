@@ -6,9 +6,7 @@ public class ProgramTests
     [TestMethod]
     public void ZeroScriptOrderTest()
     {
-        var scripts = new List<Script>();
-
-        var orderedScripts = Program.ScriptOrder(scripts);
+        var orderedScripts = Program.ScriptOrder(new List<Script>());
 
         Assert.AreEqual(0, orderedScripts.Count());
     }
@@ -72,7 +70,7 @@ public class ProgramTests
         var s3 = new Script("02.sql", "random", "random");
         var scripts = new List<Script> { s0, s1, s2, s3 };
 
-        var orderedScripts = Program.ScriptOrder(scripts);
+        var orderedScripts = Program.ScriptOrder(scripts).ToList();
 
         Assert.AreEqual(orderedScripts.First(), s0);
         Assert.AreEqual(orderedScripts.ElementAt(1), s3);

@@ -1,14 +1,15 @@
 ﻿using System.CommandLine;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
+namespace dbsync;
+
 public record Script(string Name, string Contents, string Hash);
 
-public partial class Program
+public static partial class Program
 {
     public static void Main(string[] args)
     {
@@ -123,11 +124,12 @@ public partial class Program
     public static IEnumerable<Script> ScriptOrder(IEnumerable<Script> scripts)
     {
         // Separate migrations
-        var migrationScripts = scripts
+        var scriptList = scripts.ToList();
+        var migrationScripts = scriptList
             .Where(s => MigrationScript().IsMatch(s.Name))
             .OrderBy(s => s.Name)
             .ToList();
-        var otherScripts = scripts.Where(s => !MigrationScript().IsMatch(s.Name)).ToList();
+        var otherScripts = scriptList.Where(s => !MigrationScript().IsMatch(s.Name)).ToList();
 
         // Compare script s1 with every other script s2
         // If s1 contains any mentions of s2, add s2 as a dependency
@@ -234,7 +236,7 @@ public partial class Program
         foreach (var script in scripts)
         {
             command.CommandText = $"EXISTS SELECT 1 FROM dbsync_migrations WHERE hash = {script.Hash}";
-            if ((bool)command.ExecuteScalar())
+            if ((bool)(command.ExecuteScalar() ?? false))
             {
                 yield return script;
             }
