@@ -10,8 +10,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="774e134b-8b6d-44eb-9d68-20d85c69e13c" name="Changes" comment="Rename solution and projects to sqlorder">
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    <list default="true" id="774e134b-8b6d-44eb-9d68-20d85c69e13c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/sqlorder/Script.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sqlorder/ScriptProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.dbsync/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.dbsync/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlorder.Tests/ProgramTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/sqlorder.Tests/ProgramTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlorder/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/sqlorder/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +49,9 @@
   &quot;isMigrated&quot;: true
 }</component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -234,7 +241,7 @@
       <workItem from="1724348600583" duration="6000" />
       <workItem from="1724440642319" duration="7965000" />
       <workItem from="1724696275860" duration="5000" />
-      <workItem from="1725922860522" duration="588000" />
+      <workItem from="1725922860522" duration="1231000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -260,7 +267,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725923420617</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Rename solution and projects to sqlorder">
+      <option name="closed" value="true" />
+      <created>1725923501966</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725923501966</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Rename solution and projects to sqlorder">
+      <option name="closed" value="true" />
+      <created>1725923517355</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725923517355</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
