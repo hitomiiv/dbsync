@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbsync", "dbsync\dbsync.csproj", "{C7E0C86D-2360-41F4-BABA-DDBC2E0FEC34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sqlorder", "sqlorder\sqlorder.csproj", "{C7E0C86D-2360-41F4-BABA-DDBC2E0FEC34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbsync.Test", "dbsync.Test\dbsync.Test.csproj", "{A80EC0C8-DC70-4432-8201-3CB675CD24D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sqlorder.Tests", "sqlorder.Tests\sqlorder.Tests.csproj", "{A80EC0C8-DC70-4432-8201-3CB675CD24D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

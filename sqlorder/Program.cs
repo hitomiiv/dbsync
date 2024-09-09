@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace dbsync;
+namespace sqlorder;
 
 public record Script(string Name, string Contents, string Hash);
 

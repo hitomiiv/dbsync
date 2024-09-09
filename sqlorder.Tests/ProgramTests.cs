@@ -1,4 +1,4 @@
-namespace dbsync.Test;
+namespace sqlorder.Test;
 
 [TestClass]
 public class ProgramTests
