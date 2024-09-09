@@ -1,48 +1,15 @@
-﻿using System.Data;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace sqlorder;
 
-public partial class ScriptProcessor
+public static partial class ScriptProcessor
 {
-    public static string CreateScriptList(DirectoryInfo prefix, IDbConnection connection, bool tracked)
+    public static IEnumerable<Script> OrderScripts(IEnumerable<string> paths)
     {
-        var orderedScripts = OrderedScriptsInDirectory(prefix, connection, tracked);
-
-        var builder = new StringBuilder();
-        var count = 1;
-        foreach (var script in orderedScripts)
-        {
-            builder.AppendLine($"{count}. {script.Name}");
-            count++;
-        }
-
-        if (count == 1)
-        {
-            builder.AppendLine("No scripts to run");
-        }
-
-        return builder.ToString();
+        return OrderScripts(paths.Select(ScriptFromPath));
     }
 
-    public static string CreateDeployScript(DirectoryInfo prefix, IDbConnection connection, bool tracked)
-    {
-        var orderedScripts = OrderedScriptsInDirectory(prefix, connection, tracked);
-        var deployScript = ConcatScripts(orderedScripts, tracked);
-        return deployScript;
-    }
-
-    private static IEnumerable<Script> OrderedScriptsInDirectory(DirectoryInfo prefix, IDbConnection connection,
-        bool tracked)
-    {
-        var scripts = ScriptsInDirectory(prefix);
-        var filteredScripts = connection != null && tracked ? FilterByNotRun(scripts, connection) : scripts;
-        return ScriptOrder(filteredScripts);
-    }
-
-    public static IEnumerable<Script> ScriptOrder(IEnumerable<Script> scripts)
+    public static IEnumerable<Script> OrderScripts(IEnumerable<Script> scripts)
     {
         // Separate migrations
         var scriptList = scripts.ToList();
@@ -114,62 +81,10 @@ public partial class ScriptProcessor
         return migrationScripts.Concat(orderedScripts);
     }
 
-    private static string ConcatScripts(IEnumerable<Script> scripts, bool tracked)
+    private static Script ScriptFromPath(string path)
     {
-        var builder = new StringBuilder();
-
-        // Create migrations table if needed
-        if (tracked)
-        {
-            builder.AppendLine("""
-                               CREATE TABLE IF NOT EXISTS dbsync_migrations 
-                               (
-                                   filename TEXT PRIMARY KEY, 
-                                   hash TEXT, 
-                                   timestamp DATETIME
-                               );
-                               """);
-        }
-
-        // Concat scripts
-        foreach (var script in scripts)
-        {
-            builder.AppendLine($"-- {script.Name}");
-            builder.AppendLine(script.Contents);
-
-            if (tracked)
-            {
-                builder.AppendLine($"""
-                                    INSERT INTO dbsync_migrations (filename, hash, timestamp) 
-                                    VALUES ('{script.Name}', '{script.Hash}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}');
-                                    """);
-            }
-
-            builder.AppendLine();
-        }
-
-        return builder.ToString();
-    }
-
-    private static IEnumerable<Script> FilterByNotRun(IEnumerable<Script> scripts, IDbConnection connection)
-    {
-        var command = connection.CreateCommand();
-        foreach (var script in scripts)
-        {
-            command.CommandText = $"EXISTS SELECT 1 FROM dbsync_migrations WHERE hash = {script.Hash}";
-            if ((bool)(command.ExecuteScalar() ?? false))
-            {
-                yield return script;
-            }
-        }
-    }
-
-    private static IEnumerable<Script> ScriptsInDirectory(DirectoryInfo prefix)
-    {
-        return from script in prefix.EnumerateFiles("*.sql", SearchOption.TopDirectoryOnly)
-               let contents = File.ReadAllText(script.FullName)
-               let hash = SHA1.HashData(Encoding.Default.GetBytes(contents))
-               select new Script(script.Name, contents, Encoding.Default.GetString(hash));
+        var contents = File.ReadAllText(path);
+        return new Script(Path.GetFileName(path), contents, "");
     }
 
     private static string WithoutExtension(string filename)

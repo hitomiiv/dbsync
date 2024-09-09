@@ -6,7 +6,7 @@ public class ScriptProcessorTests
     [TestMethod]
     public void ZeroScriptOrderTest()
     {
-        var orderedScripts = ScriptProcessor.ScriptOrder(new List<Script>());
+        var orderedScripts = ScriptProcessor.OrderScripts(new List<Script>());
 
         Assert.AreEqual(0, orderedScripts.Count());
     }
@@ -19,7 +19,7 @@ public class ScriptProcessorTests
         var s3 = new Script("random.sql", "random", "random");
         var scripts = new List<Script> { s3, s2, s1 };
 
-        var orderedScripts = ScriptProcessor.ScriptOrder(scripts);
+        var orderedScripts = ScriptProcessor.OrderScripts(scripts);
 
         Assert.AreEqual(orderedScripts.First(), s1);
     }
@@ -32,7 +32,7 @@ public class ScriptProcessorTests
         var s3 = new Script("random.sql", "random", "random");
         var scripts = new List<Script> { s1, s2, s3 };
 
-        var orderedScripts = ScriptProcessor.ScriptOrder(scripts);
+        var orderedScripts = ScriptProcessor.OrderScripts(scripts);
 
         Assert.AreEqual(orderedScripts.Last(), s2);
     }
@@ -46,7 +46,7 @@ public class ScriptProcessorTests
         var s4 = new Script("proc3.sql", "blah blah blah proc2 blah blah proc1", "3");
         var scripts = new List<Script> { s1, s2, s3, s4 };
 
-        var orderedScripts = ScriptProcessor.ScriptOrder(scripts);
+        var orderedScripts = ScriptProcessor.OrderScripts(scripts);
 
         Assert.AreEqual(orderedScripts.First(), s1);
     }
@@ -58,7 +58,7 @@ public class ScriptProcessorTests
         var s2 = new Script("proc2.sql", "blah blah blah proc1", "2");
         var scripts = new List<Script> { s1, s2 };
 
-        Assert.ThrowsException<Exception>(() => ScriptProcessor.ScriptOrder(scripts));
+        Assert.ThrowsException<Exception>(() => ScriptProcessor.OrderScripts(scripts));
     }
 
     [TestMethod]
@@ -70,7 +70,7 @@ public class ScriptProcessorTests
         var s3 = new Script("02.sql", "random", "random");
         var scripts = new List<Script> { s0, s1, s2, s3 };
 
-        var orderedScripts = ScriptProcessor.ScriptOrder(scripts).ToList();
+        var orderedScripts = ScriptProcessor.OrderScripts(scripts).ToList();
 
         Assert.AreEqual(orderedScripts.First(), s0);
         Assert.AreEqual(orderedScripts.ElementAt(1), s3);
