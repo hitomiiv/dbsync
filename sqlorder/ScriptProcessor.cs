@@ -121,7 +121,7 @@ public static partial class ScriptProcessor
     private static Script ScriptFromPath(string path)
     {
         var contents = File.ReadAllText(path);
-        return new Script(Path.GetFileName(path), contents);
+        return new Script(path, contents);
     }
 
     [GeneratedRegex(@"^\d+.*$")]
