@@ -11,17 +11,25 @@ public static partial class ScriptProcessor
 
     public static IEnumerable<Script> OrderScripts(IEnumerable<Script> scripts)
     {
-        // Separate migrations
         var scriptList = scripts.ToList();
-        var migrationScripts = scriptList
+
+        // Misc scripts (tables, types, etc.)
+        var miscScripts = scriptList.Where(IsOtherScript).ToList();
+        var orderedMiscScripts = SortNonMigrationScripts(miscScripts);
+
+        // Migration scripts
+        var orderedMigrationScripts = scriptList
             .Where(IsMigrationScript)
             .OrderBy(s => s.Path)
             .ToList();
-        var otherScripts = scriptList.Where(s => !IsMigrationScript(s)).ToList();
 
-        var orderedScripts = SortNonMigrationScripts(otherScripts);
+        // Function and procedure scripts
+        var functionAndProcedureScripts = scriptList.Where(IsFunctionOrProcedureScript).ToList();
+        var orderedFunctionAndProcedureScripts = SortNonMigrationScripts(functionAndProcedureScripts);
 
-        return migrationScripts.Concat(orderedScripts);
+        return orderedMiscScripts
+            .Concat(orderedMigrationScripts)
+            .Concat(orderedFunctionAndProcedureScripts);
     }
 
     private static List<Script> SortNonMigrationScripts(List<Script> scripts)
@@ -88,6 +96,18 @@ public static partial class ScriptProcessor
         return orderedScripts;
     }
 
+    private static bool IsOtherScript(Script script)
+    {
+        return !IsMigrationScript(script) && !IsFunctionOrProcedureScript(script);
+    }
+
+    private static bool IsFunctionOrProcedureScript(Script script)
+    {
+        return !IsMigrationScript(script)
+               && (FunctionScript().IsMatch(script.Contents)
+                   || ProcedureScript().IsMatch(script.Contents));
+    }
+
     private static bool IsMigrationScript(Script script)
     {
         return MigrationScript().IsMatch(ScriptName(script));
@@ -106,4 +126,10 @@ public static partial class ScriptProcessor
 
     [GeneratedRegex(@"^\d+.*$")]
     private static partial Regex MigrationScript();
+
+    [GeneratedRegex(@"create|alter|replace\s+function\s+$")]
+    private static partial Regex FunctionScript();
+
+    [GeneratedRegex(@"create|alter|replace\s+procedure\s+$")]
+    private static partial Regex ProcedureScript();
 }
