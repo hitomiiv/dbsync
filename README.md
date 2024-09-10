@@ -1,5 +1,5 @@
 # sqlorder-cli
-Keeping database objects in version control can be frustrating and sometimes even expensive depending on the tooling. Let's fix that.
+## Keeping database objects in version control can be frustrating and sometimes expensive depending on the tooling. Let's fix that.
 
 sqlorder-cli provides a dead-simple way to order and combine SQL scripts for your database or other cli tools. It analyzes references to other input files to determine the script order, so you can keep one file per database object. This way you can easily track changes to SQL scripts in version control without making them a nightmare to deploy.  
 
