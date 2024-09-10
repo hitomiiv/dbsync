@@ -8,8 +8,7 @@ internal static class Program
         var scriptPaths = new List<string>();
         while (Console.ReadLine() is { } path)
         {
-            if (path.EndsWith(".sql"))
-                scriptPaths.Add(path);
+            scriptPaths.Add(path);
         }
 
         // Output ordered scripts

@@ -6,7 +6,7 @@ public static partial class ScriptProcessor
 {
     public static IEnumerable<Script> OrderScripts(IEnumerable<string> paths)
     {
-        return OrderScripts(paths.Select(ScriptFromPath));
+        return OrderScripts(paths.Where(path => path.EndsWith(".sql")).Select(ScriptFromPath));
     }
 
     public static IEnumerable<Script> OrderScripts(IEnumerable<Script> scripts)
