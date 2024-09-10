@@ -14,10 +14,10 @@ public static partial class ScriptProcessor
         // Separate migrations
         var scriptList = scripts.ToList();
         var migrationScripts = scriptList
-            .Where(s => MigrationScript().IsMatch(s.Name))
-            .OrderBy(s => s.Name)
+            .Where(IsMigrationScript)
+            .OrderBy(s => s.Path)
             .ToList();
-        var otherScripts = scriptList.Where(s => !MigrationScript().IsMatch(s.Name)).ToList();
+        var otherScripts = scriptList.Where(s => !IsMigrationScript(s)).ToList();
 
         var orderedScripts = SortNonMigrationScripts(otherScripts);
 
@@ -31,13 +31,13 @@ public static partial class ScriptProcessor
         var dependencies = new Dictionary<Script, HashSet<Script>>();
         foreach (var s1 in scripts)
         {
-            foreach (var s2 in scripts.Where(s2 => s1 != s2 && s1.Contents.Contains(FilenameWithoutExtension(s2.Name))))
+            foreach (var s2 in scripts.Where(s2 => s1 != s2 && s1.Contents.Contains(ScriptName(s2))))
             {
                 // Throw if dependency is cyclic
                 if (dependencies.TryGetValue(s2, out var s2deps)
-                    && s2deps.Select(s => s.Name).Contains(s1.Name))
+                    && s2deps.Select(s => s.Path).Contains(s1.Path))
                 {
-                    throw new Exception($"Cyclic dependency detected between {s1.Name} and {s2.Name}");
+                    throw new Exception($"Cyclic dependency detected between {s1.Path} and {s2.Path}");
                 }
 
                 // Add s2 as a dependency
@@ -63,7 +63,7 @@ public static partial class ScriptProcessor
             // If unvisited dependencies exist, add them to the stack
             if (dependencies.TryGetValue(s, out var deps))
             {
-                var depsNotVisited = deps.Where(d => !visited.Contains(d.Name)).ToList();
+                var depsNotVisited = deps.Where(d => !visited.Contains(d.Path)).ToList();
                 if (depsNotVisited.Count > 0)
                 {
                     foreach (var dep in depsNotVisited)
@@ -76,10 +76,10 @@ public static partial class ScriptProcessor
             }
 
             // Leaf node or all dependencies visited
-            if (!visited.Contains(s.Name))
+            if (!visited.Contains(s.Path))
             {
                 orderedScripts.Add(s);
-                visited.Add(s.Name);
+                visited.Add(s.Path);
             }
 
             scriptsToVisit.Pop();
@@ -88,17 +88,22 @@ public static partial class ScriptProcessor
         return orderedScripts;
     }
 
+    private static bool IsMigrationScript(Script script)
+    {
+        return MigrationScript().IsMatch(ScriptName(script));
+    }
+
+    private static string ScriptName(Script script)
+    {
+        return Path.GetFileNameWithoutExtension(script.Path);
+    }
+
     private static Script ScriptFromPath(string path)
     {
         var contents = File.ReadAllText(path);
         return new Script(Path.GetFileName(path), contents);
     }
 
-    private static string FilenameWithoutExtension(string filename)
-    {
-        return Path.GetFileNameWithoutExtension(filename);
-    }
-
-    [GeneratedRegex(@"^\d+.*.sql$")]
+    [GeneratedRegex(@"^\d+.*$")]
     private static partial Regex MigrationScript();
 }

@@ -26,7 +26,7 @@ internal static class Program
             // Print filenames
             foreach (var script in orderedScripts)
             {
-                Console.WriteLine(script.Name);
+                Console.WriteLine(script.Path);
             }
         }
     }

@@ -1,3 +1,3 @@
 ﻿namespace sqlorder;
 
-public record Script(string Name, string Contents);
+public record Script(string Path, string Contents);
