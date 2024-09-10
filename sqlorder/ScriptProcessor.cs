@@ -19,12 +19,19 @@ public static partial class ScriptProcessor
             .ToList();
         var otherScripts = scriptList.Where(s => !MigrationScript().IsMatch(s.Name)).ToList();
 
+        var orderedScripts = SortNonMigrationScripts(otherScripts);
+
+        return migrationScripts.Concat(orderedScripts);
+    }
+
+    private static List<Script> SortNonMigrationScripts(List<Script> scripts)
+    {
         // Compare script s1 with every other script s2
         // If s1 contains any mentions of s2, add s2 as a dependency
         var dependencies = new Dictionary<Script, HashSet<Script>>();
-        foreach (var s1 in otherScripts)
+        foreach (var s1 in scripts)
         {
-            foreach (var s2 in otherScripts.Where(s2 => s1 != s2 && s1.Contents.Contains((string)WithoutExtension(s2.Name))))
+            foreach (var s2 in scripts.Where(s2 => s1 != s2 && s1.Contents.Contains(FilenameWithoutExtension(s2.Name))))
             {
                 // Throw if dependency is cyclic
                 if (dependencies.TryGetValue(s2, out var s2deps)
@@ -47,7 +54,7 @@ public static partial class ScriptProcessor
 
         // Order by dependencies (visit each node post-order)
         var orderedScripts = new List<Script>();
-        var scriptsToVisit = new Stack<Script>(otherScripts);
+        var scriptsToVisit = new Stack<Script>(scripts);
         var visited = new HashSet<string>();
         while (scriptsToVisit.Count > 0)
         {
@@ -78,7 +85,7 @@ public static partial class ScriptProcessor
             scriptsToVisit.Pop();
         }
 
-        return migrationScripts.Concat(orderedScripts);
+        return orderedScripts;
     }
 
     private static Script ScriptFromPath(string path)
@@ -87,7 +94,7 @@ public static partial class ScriptProcessor
         return new Script(Path.GetFileName(path), contents);
     }
 
-    private static string WithoutExtension(string filename)
+    private static string FilenameWithoutExtension(string filename)
     {
         return Path.GetFileNameWithoutExtension(filename);
     }
